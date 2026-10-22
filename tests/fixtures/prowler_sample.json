@@ -1,0 +1,52 @@
+[
+  {
+    "metadata": {"event_code": "s3_bucket_public_access"},
+    "finding_info": {"uid": "f-1", "title": "Ensure S3 buckets are not publicly accessible", "desc": "Bucket allows public read."},
+    "severity": "Critical",
+    "status_code": "FAIL",
+    "status_detail": "S3 Bucket acme-logs is publicly readable.",
+    "cloud": {"account": {"uid": "111122223333"}, "region": "eu-west-1"},
+    "resources": [{"uid": "arn:aws:s3:::acme-logs", "region": "eu-west-1", "type": "AwsS3Bucket"}],
+    "remediation": {"desc": "Enable S3 Block Public Access on the bucket and account."}
+  },
+  {
+    "metadata": {"event_code": "ec2_securitygroup_allow_ingress_from_internet_to_tcp_port_22"},
+    "finding_info": {"uid": "f-2", "title": "Ensure no security groups allow SSH from the internet", "desc": "SSH open to the world."},
+    "severity": "High",
+    "status_code": "FAIL",
+    "status_detail": "Security group sg-0abc123 allows SSH from 0.0.0.0/0; failed logins seen from 45.33.32.156.",
+    "cloud": {"account": {"uid": "111122223333"}, "region": "eu-west-1"},
+    "resources": [{"uid": "arn:aws:ec2:eu-west-1:111122223333:security-group/sg-0abc123", "region": "eu-west-1", "type": "AwsEc2SecurityGroup"}],
+    "remediation": {"desc": "Restrict port 22 to known IP ranges or use SSM Session Manager."}
+  },
+  {
+    "metadata": {"event_code": "iam_password_policy_minimum_length_14"},
+    "finding_info": {"uid": "f-3", "title": "Ensure IAM password policy requires 14 characters", "desc": "Weak password policy."},
+    "severity": "Medium",
+    "status_code": "FAIL",
+    "status_detail": "Password policy minimum length is 8.",
+    "cloud": {"account": {"uid": "111122223333"}, "region": "us-east-1"},
+    "resources": [{"uid": "arn:aws:iam::111122223333:root", "region": "us-east-1", "type": "AwsIamPasswordPolicy"}],
+    "remediation": {"desc": "Set minimum password length to 14."}
+  },
+  {
+    "metadata": {"event_code": "cloudtrail_multi_region_enabled"},
+    "finding_info": {"uid": "f-4", "title": "Ensure CloudTrail is enabled in all regions", "desc": "CloudTrail check."},
+    "severity": "High",
+    "status_code": "PASS",
+    "status_detail": "CloudTrail trail main is multi-region.",
+    "cloud": {"account": {"uid": "111122223333"}, "region": "us-east-1"},
+    "resources": [{"uid": "arn:aws:cloudtrail:us-east-1:111122223333:trail/main", "region": "us-east-1", "type": "AwsCloudTrailTrail"}],
+    "remediation": {"desc": ""}
+  },
+  {
+    "metadata": {"event_code": "s3_bucket_public_access"},
+    "finding_info": {"uid": "f-5", "title": "Ensure S3 buckets are not publicly accessible", "desc": "Bucket allows public read."},
+    "severity": "Critical",
+    "status_code": "FAIL",
+    "status_detail": "S3 Bucket acme-logs is publicly readable.",
+    "cloud": {"account": {"uid": "111122223333"}, "region": "eu-west-1"},
+    "resources": [{"uid": "arn:aws:s3:::acme-logs", "region": "eu-west-1", "type": "AwsS3Bucket"}],
+    "remediation": {"desc": "Enable S3 Block Public Access on the bucket and account."}
+  }
+]
