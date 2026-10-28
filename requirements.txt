@@ -3,3 +3,4 @@ uvicorn>=0.32
 requests>=2.32
 boto3>=1.35
 geoip2>=4.8
+python-dotenv>=1.0
