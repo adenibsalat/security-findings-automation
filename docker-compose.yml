@@ -11,5 +11,13 @@ services:
     volumes:
       - n8n_data:/home/node/.n8n
 
+  api:
+    build: .
+    container_name: findings-api
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "127.0.0.1:8001:8000"
+
 volumes:
   n8n_data:
