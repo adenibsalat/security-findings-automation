@@ -1,5 +1,6 @@
 # Service account the API container logs in as. Its only power: assume the reader role.
 resource "aws_iam_user" "svc" {
+  #checkov:skip=CKV_AWS_273:Service account for a container running outside AWS; SSO is for humans
   name = "${var.project}-svc"
 }
 
