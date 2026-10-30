@@ -9,6 +9,7 @@ import requests
 from dotenv import load_dotenv
 
 from finding_pipeline.prowler import Finding, filter_actionable, load_findings
+from finding_pipeline.secrets import get_jira_credentials
 
 SEVERITY_LABELS = {"critical": "Critical", "high": "High", "medium": "Medium", "low": "Low"}
 
@@ -26,10 +27,11 @@ class JiraConfig:
 
     @classmethod
     def from_env(cls) -> Self:
+        email, api_token = get_jira_credentials()
         return cls(
             base_url=os.environ["JIRA_BASE_URL"].rstrip("/"),
-            email=os.environ["JIRA_EMAIL"],
-            api_token=os.environ["JIRA_API_TOKEN"],
+            email=email,
+            api_token=api_token,
             project_key=os.environ.get("JIRA_PROJECT_KEY", "SEC"),
             issue_type=os.environ.get("JIRA_ISSUE_TYPE", "Task"),
             severity_field=os.environ.get("JIRA_FIELD_SEVERITY", ""),

@@ -18,6 +18,11 @@ services:
     env_file: .env
     ports:
       - "127.0.0.1:8001:8000"
+    environment:
+      - AWS_CONFIG_FILE=/aws/config
+      - AWS_SHARED_CREDENTIALS_FILE=/aws/credentials
+    volumes:
+      - ${USERPROFILE}/.aws-findings:/aws:ro
 
 volumes:
   n8n_data:
