@@ -85,6 +85,7 @@ def test_description_has_no_empty_paragraphs():
     content = JiraClient(CONFIG, FakeSession()).build_payload(no_fix)["fields"]["description"]
     assert all(p["content"][0]["text"] for p in content["content"])
 
+
 def test_country_field_filled_from_ip(monkeypatch):
     monkeypatch.setattr(
         "finding_pipeline.jira_client.countries_for_ips",
