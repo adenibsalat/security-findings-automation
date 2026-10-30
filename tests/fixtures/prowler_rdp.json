@@ -1,0 +1,12 @@
+[
+  {
+    "metadata": {"event_code": "ec2_securitygroup_allow_ingress_from_internet_to_tcp_port_3389"},
+    "finding_info": {"uid": "f-6", "title": "Ensure no security groups allow RDP from the internet", "desc": "RDP open to the world."},
+    "severity": "High",
+    "status_code": "FAIL",
+    "status_detail": "Security group sg-0rdp456 allows RDP from 0.0.0.0/0; brute-force attempts seen from 45.33.32.156.",
+    "cloud": {"account": {"uid": "111122223333"}, "region": "eu-west-1"},
+    "resources": [{"uid": "arn:aws:ec2:eu-west-1:111122223333:security-group/sg-0rdp456", "region": "eu-west-1", "type": "AwsEc2SecurityGroup"}],
+    "remediation": {"desc": "Restrict port 3389 to known IP ranges or use SSM Fleet Manager."}
+  }
+]

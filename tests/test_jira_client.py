@@ -84,3 +84,13 @@ def test_description_has_no_empty_paragraphs():
     no_fix = Finding(**{**FINDING.__dict__, "remediation": ""})
     content = JiraClient(CONFIG, FakeSession()).build_payload(no_fix)["fields"]["description"]
     assert all(p["content"][0]["text"] for p in content["content"])
+
+def test_country_field_filled_from_ip(monkeypatch):
+    monkeypatch.setattr(
+        "finding_pipeline.jira_client.countries_for_ips",
+        lambda ips: "United States (45.33.32.156)",
+    )
+    config = JiraConfig(**{**CONFIG.__dict__, "country_field": "customfield_10047"})
+    finding = Finding(**{**FINDING.__dict__, "ip_addresses": ["45.33.32.156"]})
+    fields = JiraClient(config, FakeSession()).build_payload(finding)["fields"]
+    assert fields["customfield_10047"] == "United States (45.33.32.156)"

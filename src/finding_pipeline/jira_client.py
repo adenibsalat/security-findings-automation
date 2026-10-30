@@ -8,6 +8,7 @@ from typing import Any, Self
 import requests
 from dotenv import load_dotenv
 
+from finding_pipeline.enrich import countries_for_ips
 from finding_pipeline.prowler import Finding, filter_actionable, load_findings
 from finding_pipeline.secrets import get_jira_credentials
 
@@ -24,6 +25,7 @@ class JiraConfig:
     severity_field: str = ""
     account_field: str = ""
     resource_field: str = ""
+    country_field: str = ""
 
     @classmethod
     def from_env(cls) -> Self:
@@ -37,6 +39,7 @@ class JiraConfig:
             severity_field=os.environ.get("JIRA_FIELD_SEVERITY", ""),
             account_field=os.environ.get("JIRA_FIELD_ACCOUNT", ""),
             resource_field=os.environ.get("JIRA_FIELD_RESOURCE", ""),
+            country_field=os.environ.get("JIRA_FIELD_COUNTRY", ""),
         )
 
 
@@ -76,6 +79,7 @@ class JiraClient:
         cfg = self.config
         summary = f"[{finding.severity.upper()}] {finding.title} - {finding.resource_id}"
         labels = ["prowler", f"fp-{finding.fingerprint}", finding.check_id]
+        countries = countries_for_ips(finding.ip_addresses) if finding.ip_addresses else ""
         fields: dict[str, Any] = {
             "project": {"key": cfg.project_key},
             "issuetype": {"name": cfg.issue_type},
@@ -85,6 +89,7 @@ class JiraClient:
                 f"Check: {finding.check_id}",
                 f"Account: {finding.account_id} / Region: {finding.region}",
                 f"Resource: {finding.resource_id}",
+                f"Source IPs: {countries}" if countries else "",
                 f"Remediation: {finding.remediation}" if finding.remediation else "",
             ),
             "labels": [label for label in labels if label],
@@ -95,6 +100,8 @@ class JiraClient:
             fields[cfg.account_field] = finding.account_id
         if cfg.resource_field:
             fields[cfg.resource_field] = finding.resource_id[:255]
+        if cfg.country_field and countries:
+            fields[cfg.country_field] = countries[:255]
         return {"fields": fields}
 
     def create_issue(self, finding: Finding) -> tuple[str, bool]:
