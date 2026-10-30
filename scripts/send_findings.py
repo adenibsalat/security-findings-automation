@@ -16,6 +16,7 @@ def main() -> int:
     parser.add_argument("--url", default="http://127.0.0.1:8000/findings")
     parser.add_argument("--min-severity", default="high")
     parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--key-env", default="PIPELINE_API_KEY", help="Env var holding the key")
     args = parser.parse_args()
 
     load_dotenv()
@@ -28,7 +29,7 @@ def main() -> int:
     resp = requests.post(
         args.url,
         json={"findings": findings, "min_severity": args.min_severity, "dry_run": args.dry_run},
-        headers={"X-Api-Key": os.environ.get("PIPELINE_API_KEY", "")},
+        headers={"X-Api-Key": os.environ.get(args.key_env, "")},
         timeout=120,
     )
     print(f"HTTP {resp.status_code}")

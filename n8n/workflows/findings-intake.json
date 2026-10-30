@@ -1,0 +1,105 @@
+{
+  "name": "Findings Intake",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "prowler-findings",
+        "authentication": "headerAuth",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "9844545d-4070-4aad-a5e5-95f8e510ec0f",
+      "name": "Webhook",
+      "webhookId": "dfc45ee6-d9e0-4e06-ab68-77d964faee75",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "tjCtBXd8ewk4ROQO",
+          "name": "Webhook key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api:8000/findings",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.body }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "aed8a5c8-a812-4391-be8b-0ba49e23a863",
+      "name": "HTTP Request",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "mo5YdSgnvVqBCxig",
+          "name": "Findings API key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        416,
+        0
+      ],
+      "id": "557a9bc0-258f-4b29-8775-22ec45275030",
+      "name": "Respond to Webhook"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "5a3ada1d-09c1-4438-808c-0eafbc6a71c9",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "d05ca73ab293abfa77fafe4e0afaf5f13cd9b8a7c16b8e107b70b13297cf4f38"
+  },
+  "id": "uYojoD9oJuVJx2TL",
+  "tags": []
+}
